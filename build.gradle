@@ -1,0 +1,36 @@
+buildscript {
+    ext{    // 전역 변수
+        springBootVersion = '2.1.7.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")    // 의존성의 버전 관리
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management' // 의존성을 관리해주는 플러그인 (필수)
+
+group 'org.dhzm.book'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+// 원격 저장소
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    // dependencies
+    compile('org.springframework.boot:spring-boot-starter-web')
+
+    //test
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
