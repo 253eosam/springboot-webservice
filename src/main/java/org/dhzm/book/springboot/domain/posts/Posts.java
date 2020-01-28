@@ -29,6 +29,13 @@ public class Posts {
         this.content = content;
         this.author = author;
     }
+
+    // 객체지향 프로그래밍에서 클래스의 상태를 변경하는 것은 자기 자신이 해야할 일
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
 }
 
 /*
