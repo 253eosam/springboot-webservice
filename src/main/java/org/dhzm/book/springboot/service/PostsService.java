@@ -3,11 +3,16 @@ package org.dhzm.book.springboot.service;
 import lombok.RequiredArgsConstructor;
 import org.dhzm.book.springboot.domain.posts.Posts;
 import org.dhzm.book.springboot.domain.posts.PostsRepository;
+import org.dhzm.book.springboot.web.dto.PostsListResponseDto;
 import org.dhzm.book.springboot.web.dto.PostsResponseDto;
 import org.dhzm.book.springboot.web.dto.PostsSaveRequestDto;
 import org.dhzm.book.springboot.web.dto.PostsUpdateRequestDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -35,6 +40,13 @@ public class PostsService {
 
         return new PostsResponseDto(entity);
     }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc(){
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }
 
 /*
@@ -50,4 +62,11 @@ public class PostsService {
     - 트랜잭션 안에서 데이터베이스에서 데이터를 가져오면 이 데이터는 영속성 컨텍스트가 유지 -> 트랜잭션이 끝나는 시점에
         해당 테이블에 변경분을 반영 (Update 쿼리를 날릴 필요가 없음 | ** 더티 체킹 **)
 
+    readOnly = true
+    - 트랜잭션 범위는 유지하되, 조회 기능만 남겨두어 조회 속도를 개선
+    - 등록, 수정, 삭제 기능이 전혀 없는 서비스 메소드에서 사용
+
+    .map(PostsListResponseDto::new)
+    .map(posts-> new PostsListResponseDto(posts))
+    postsRepository 결과로 넘어온 Posts의 Stream을 map을 통해 PostsListResponseDto 변환-> List로 변환하는 메소드
  */
