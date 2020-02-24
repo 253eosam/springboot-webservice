@@ -1,6 +1,7 @@
 package org.dhzm.book.springboot.web;
 
 import lombok.RequiredArgsConstructor;
+import org.dhzm.book.springboot.config.auth.LoginUser;
 import org.dhzm.book.springboot.config.auth.dto.SessionUser;
 import org.dhzm.book.springboot.domain.user.User;
 import org.dhzm.book.springboot.service.PostsService;
@@ -20,9 +21,8 @@ public class indexController {
     private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postsService.findAllDesc());
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
 
         if( user != null ){
             model.addAttribute("userName",user.getName());
@@ -57,4 +57,8 @@ public class indexController {
     if(user != null)
     - 세션에 저장된 값이 있을 때만 model에 userName으로 등록
     - 세션에 저장된 값이 없으면 model엔 아무런 값이 없는 상태이니 로그인 버튼이 보이게 됨.
+
+    @LoginUser SessionUser user
+    - 기존에(User) httpSession.getAttribute("user")로 가져오던 세션 정보 값이 개선됨
+    - @LoginUser만 사용하면 세션 정보를 가져올 수 있음
 */
